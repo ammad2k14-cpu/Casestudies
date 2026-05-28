@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Magnify — Case Studies</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #21262d;
+      --accent: #2563eb;
+      --accent2: #10b981;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --card-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-text span:first-child {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .logo-text span:last-child {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .header-badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── Slide counter ── */
+    .slide-counter {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .slide-counter span {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* ── Stage ── */
+    .stage {
+      position: fixed;
+      inset: 0;
+      padding-top: 73px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── Carousel track ── */
+    .carousel {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .track-wrapper {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    /* ── Slide ── */
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 100px;
+      position: relative;
+    }
+
+    .slide-inner {
+      max-width: 1200px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .slide-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-label .badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.3);
+      color: #60a5fa;
+    }
+
+    .slide-label .title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .img-frame {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* placeholder shown when no src */
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+    }
+
+    .placeholder svg { opacity: 0.3; }
+
+    .placeholder p {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ── Nav arrows ── */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 200;
+      width: 52px;
+      height: 52px;
+      background: rgba(22,27,34,0.9);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .nav-btn:active { transform: translateY(-50%) scale(0.96); }
+
+    .nav-btn svg { width: 20px; height: 20px; stroke: var(--text); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .nav-btn.prev { left: 20px; }
+    .nav-btn.next { right: 20px; }
+
+    .nav-btn:disabled { opacity: 0.25; pointer-events: none; }
+
+    /* ── Dot indicators ── */
+    .dots {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 1px solid var(--muted);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, width 0.3s;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ── Keyboard hint ── */
+    .kbd-hint {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kbd {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      position: fixed;
+      top: 73px;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+    </div>
+    <div class="logo-text">
+      <span>Seller Magnify</span>
+      <span>Dashboard</span>
+    </div>
+  </div>
+
+  <div class="slide-counter">
+    Slide <span id="current-num">1</span> of <span id="total-num">1</span>
+  </div>
+
+  <div class="header-badge">Case Studies</div>
+</header>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progress"></div>
+
+<!-- Stage -->
+<div class="stage">
+  <div class="carousel">
+    <div class="track-wrapper">
+      <div class="track" id="track">
+        <!-- slides injected by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Nav arrows -->
+<button class="nav-btn prev" id="prev" aria-label="Previous">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+<button class="nav-btn next" id="next" aria-label="Next">
+  <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+</button>
+
+<!-- Dot indicators -->
+<div class="dots" id="dots"></div>
+
+<!-- Keyboard hint -->
+<div class="kbd-hint">
+  <span class="kbd">←</span><span class="kbd">→</span> to navigate
+</div>
+
+<script>
+  // ── Slide data ──────────────────────────────────────────────────────────────
+  // Add image paths in the `src` field. Place images in the /screenshots folder.
+  // Leave src as "" to show a placeholder until you upload.
+  const slides = [
+    { label: "Result 01", title: "Monthly Performance — July / June / May 2025", src: "screenshots/slide1.png" },
+    { label: "Result 02", title: "Monthly Performance — October / September / August",  src: "screenshots/slide2.png" },
+    { label: "Result 03", title: "Monthly Performance — December / November / October",  src: "screenshots/slide3.png" },
+  ];
+
+  // ── Build DOM ────────────────────────────────────────────────────────────────
+  const track   = document.getElementById('track');
+  const dotsEl  = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const curNum  = document.getElementById('current-num');
+  const totNum  = document.getElementById('total-num');
+  const progress= document.getElementById('progress');
+
+  totNum.textContent = slides.length;
+
+  slides.forEach((s, i) => {
+    // slide
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+    slide.innerHTML = `
+      <div class="slide-inner">
+        <div class="slide-label">
+          <span class="badge">${s.label}</span>
+          <span class="title">${s.title}</span>
+        </div>
+        <div class="img-frame">
+          ${s.src
+            ? `<img src="${s.src}" alt="${s.title}" loading="lazy" />`
+            : `<div class="placeholder">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <p>Screenshot coming soon</p>
+              </div>`
+          }
+        </div>
+      </div>`;
+    track.appendChild(slide);
+
+    // dot
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  // ── State ────────────────────────────────────────────────────────────────────
+  let current = 0;
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(slides.length - 1, idx));
+    track.style.transform = `translateX(-${current * 100}%)`;
+    curNum.textContent = current + 1;
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  // touch / swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+  });
+
+  goTo(0);
+</script>
+</body>
+</html>
